@@ -1,0 +1,19 @@
+.profile-picture img {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.profile-info {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profile-info .profile-username {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.profile-info .profile-score {
+  font-size: 20px;
+  font-weight: 800;
+}

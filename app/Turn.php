@@ -1,0 +1,15 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Turn extends Model
+{
+    public $fillable = ['player_id', 'location', 'type', 'game_id'];
+
+	public function game()
+	{
+		return $this->belongsTo('App\Game', 'game_id');
+	}
+}
