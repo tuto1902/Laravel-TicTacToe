@@ -11,8 +11,10 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
+    @yield('styles')
 
     <!-- Scripts -->
     <script>
