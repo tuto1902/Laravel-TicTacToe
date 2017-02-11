@@ -3,6 +3,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\GameOver;
+use App\Events\Play;
+use App\Game;
 use App\Turn;
 use Illuminate\Http\Request;
 
@@ -18,13 +21,13 @@ class GameController extends Controller
 	{
 		$user = $request->user();
 
-		$players = Turn::where('game_id', '=', $id)->select(['player_id', 'type'])->distinct()->get();
-
-		$allowed = $user->id == $players[0]->player_id || $user->id == $players[1]->player_id;
-		$playerType = $user->id == $players[0]->player_id ? $players[0]->type : $players[1]->type;
-		if(!$allowed){
+		if(!$this->allowed($user->id, $id)){
 			return redirect()->back()->with("error", "You are not allowed on that game");
 		}
+
+		$players = Turn::where('game_id', '=', $id)->select(['player_id', 'type'])->distinct()->get();
+		$playerType = $user->id == $players[0]->player_id ? $players[0]->type : $players[1]->type;
+		$otherPlayerId = $user->id == $players[0]->player_id ? $players[1]->player_id : $players[0]->player_id;
 
 		$pastTurns = Turn::where('game_id', '=', $id)->whereNotNull('location')->orderBy('id')->get();
 		$nextTurn = Turn::where('game_id', '=', $id)->whereNull('location')->orderBy('id')->first();
@@ -83,24 +86,53 @@ class GameController extends Controller
 			$locations[$pastTurn->location]["type"] = $pastTurn->type;
 		}
 
-		return view('board', compact('user', 'nextTurn', 'locations', 'playerType'));
+		return view('board', compact('user', 'id', 'nextTurn', 'locations', 'playerType', 'otherPlayerId'));
 	}
 
 	public function play(Request $request, $id)
 	{
 		$user = $request->user();
 
-		$players = Turn::where('game_id', '=', '$id')->select(['player_id', 'type'])->distinct()->get();
-		$allowed = $user->id == $players[0]->player_id || $user->id == $players[1]->player_id;
-
-		if(!$allowed){
+		if(!$this->allowed($user->id, $id)){
 			return response()->json(["status" => "error", "data" => "You are not in this game"]);
 		}
 
 		$location = $request->get('location');
-		$turn = Turn::where("game_id", "=", $id)->where("id", "=", $request->get("id"));
+		$turn = Turn::where('game_id', '=', $id)->whereNull('location')->orderBy('id')->first();
 		$turn->location = $location;
 		$turn->save();
+		event(new Play($turn->game_id, $user->id, $location, $turn->type));
 		return response()->json(["status" => "success", "data" => "Saved"]);
+	}
+
+	public function gameOver(Request $request, $id)
+	{
+		$user = $request->user();
+
+		if(!$this->allowed($user->id, $id)){
+			return response()->json(["status" => "error", "data" => "You are not in this game"]);
+		}
+
+		$location = $request->get('location');
+		$turn = Turn::where('game_id', '=', $id)->whereNull('location')->orderBy('id')->first();
+		$turn->location = $location;
+		$turn->save();
+		if($request->get('result') == "win"){
+			$user->score++;
+			$user->save();
+		}
+		$game = Game::find($id);
+		$game->end_date = date("Y-m-d H:i:s");
+		$game->save();
+		event(new GameOver($id, $user->id, $request->get('result'), $location, $turn->type));
+		return response()->json(["status" => "success", "data" => "Saved"]);
+	}
+
+	private function allowed($userId, $gameId)
+	{
+		$players = Turn::where('game_id', '=', $gameId)->select(['player_id', 'type'])->distinct()->get();
+		$allowed = $userId == $players[0]->player_id || $userId == $players[1]->player_id;
+
+		return $allowed;
 	}
 }

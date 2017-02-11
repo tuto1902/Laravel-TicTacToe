@@ -10,25 +10,32 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class Play implements ShouldBroadcast
+class GameOver implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $result;
     public $gameId;
+    public $userId;
     public $type;
     public $location;
-    public $userId;
 
-    public function __construct($gameId, $userId, $location, $type)
+    public function __construct($gameId, $userId, $result, $location, $type)
     {
         $this->gameId = $gameId;
+        $this->result = $result;
         $this->location = $location;
         $this->type = $type;
         $this->userId = $userId;
     }
 
+    /**
+     * Get the channels the event should broadcast on.
+     *
+     * @return Channel|array
+     */
     public function broadcastOn()
     {
-        return new Channel('game-channel-' . $this->gameId . '-' . $this->userId);
+        return new Channel('game-over-channel-' . $this->gameId . '-' . $this->userId);
     }
 }

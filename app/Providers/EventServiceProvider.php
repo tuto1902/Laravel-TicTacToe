@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Play' => [
             'App\Listeners\PlayListener',
         ],
+        'App\Events\GameOver' => [
+            'App\Listeners\GameOverListener',
+        ],
     ];
 
     /**
