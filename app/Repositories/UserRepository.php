@@ -13,4 +13,9 @@ class UserRepository extends Repository
 	{
 		return 'App\User';
 	}
+
+	function search($keyword)
+	{
+		$this->model = $this->model->where('name', 'like', "%{$request->get('search')}%")
+	}
 }

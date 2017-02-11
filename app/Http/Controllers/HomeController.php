@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\Criteria\User\ExcludeUser;
-use App\Repositories\Criteria\User\Search;
+
 use App\Repositories\UserRepository;
+use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-
-    private $users;
-
+    private $
     public function __construct(UserRepository $users)
     {
         $this->middleware('auth');
-        $this->users = $users;
     }
 
     public function index(Request $request)
     {
         $user = $request->user();
+        $usersQuery = User::where('id', '!=', $user->id);
+
         if($request->has('search')){
-            $this->users->pushCriteria(new Search($request->get('search'), ['name']));
+            $usersQuery->where('name', 'like', "%{$request->get('search')}%");
         }
-        $users = $this->users->pushCriteria(new ExcludeUser($user->id))->paginate(5);
+
+        $users = $usersQuery->paginate(5);
+
         return view('home', compact('user', 'users'));
     }
 }
