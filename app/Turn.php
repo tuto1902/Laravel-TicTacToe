@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Model\Traits\HasCompositePrimaryKey;
 use Illuminate\Database\Eloquent\Model;
 
 class Turn extends Model

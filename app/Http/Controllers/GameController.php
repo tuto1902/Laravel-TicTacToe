@@ -6,13 +6,12 @@ namespace App\Http\Controllers;
 use App\Turn;
 use Illuminate\Http\Request;
 
-class GameController
+class GameController extends Controller
 {
-	private $turns;
 
-	public function __construct(Turn $turns)
+	public function __construct()
 	{
-		$this->turns = $turns;
+		$this->middleware('auth');
 	}
 
 	public function board(Request $request, $id)
@@ -27,8 +26,8 @@ class GameController
 			return redirect()->back()->with("error", "You are not allowed on that game");
 		}
 
-		$pastTurns = Turn::where('game_id', '=', '$id')->whereNotNull('location')->orderBy('id')->get();
-		$nextTurn = Turn::where('game_id', '=', '$id')->whereNull('location')->orderBy('id')->first();
+		$pastTurns = Turn::where('game_id', '=', $id)->whereNotNull('location')->orderBy('id')->get();
+		$nextTurn = Turn::where('game_id', '=', $id)->whereNull('location')->orderBy('id')->first();
 
 		$locations = [
 			1 => [

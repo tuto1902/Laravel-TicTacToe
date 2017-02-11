@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 
-use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    private $
-    public function __construct(UserRepository $users)
+    public function __construct()
     {
         $this->middleware('auth');
     }
