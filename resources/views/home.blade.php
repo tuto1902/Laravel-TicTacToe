@@ -18,6 +18,23 @@
 </style>
 @endsection
 
+@section('scripts')
+<script language="javascript">
+    var pusher = new Pusher('4a4eb548348c96e11364');
+    var gamePlayChannel = pusher.subscribe('new-game-channel');
+    gamePlayChannel.bind('App\\Events\\NewGame', function(data) {
+        if(data.destinationUserId == '{{$user->id}}'){
+            $('#from').html(data.from);
+            $('#new-game-form').attr('action', '/board/' + data.gameId);
+            $('#new-game-modal').modal('show');
+        }
+    });
+    $('#play-button').on('click', function(){
+        $('#new-game-form').submit();
+    });
+</script>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -61,8 +78,11 @@
                                 {{$_user->name}}<br>
                                 <small>Score: {{$_user->score}}</small>
                             </span>
-                            <input type="hidden" id="user-id-{{$_user->id}}">
-                            <button type="button" class="btn btn-primary pull-right">Invite</button>
+                            <form action="/new-game" method="post">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="user_id" value="{{$_user->id}}">
+                                <button type="submit" class="btn btn-primary pull-right">Play</button>
+                            </form>
                         </a>
                         @endforeach
                     </div>
@@ -74,4 +94,25 @@
         </div>
     </div>
 </div>
+<form id="new-game-form" method="get">
+    {{ csrf_field() }}
+</form>
+<div class="modal fade" id="new-game-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">New Game</h4>
+            </div>
+            <div class="modal-body">
+                <p><span id="from"></span> invited you to a game</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Not now</button>
+                <button id="play-button" type="button" class="btn btn-primary">Play</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 @endsection
