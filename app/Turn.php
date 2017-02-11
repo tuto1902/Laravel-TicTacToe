@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Turn extends Model
 {
-	use HasCompositePrimaryKey;
-
 	public $incrementing = false;
-	protected $primaryKey = ['id', 'game_id'];
     public $fillable = ['player_id', 'location', 'type', 'game_id', 'id'];
 
 	public function game()

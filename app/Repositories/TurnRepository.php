@@ -11,4 +11,13 @@ class TurnRepository extends Repository
 	{
 		return 'App\Turn';
 	}
+
+	public function find($ids, $columns = ['*'])
+	{
+		$this->applyCriteria();
+		foreach($ids as $key => $value){
+			$query = $this->model->where($key, '=', $value);
+		}
+		return $query->select($columns)->first();
+	}
 }

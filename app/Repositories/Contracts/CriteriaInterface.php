@@ -11,4 +11,5 @@ interface CriteriaInterface
 	public function pushCriteria(Criteria $criteria);
 	public function getCriteria();
 	public function applyCriteria();
+	public function resetCriteria();
 }

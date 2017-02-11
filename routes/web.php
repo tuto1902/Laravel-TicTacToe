@@ -16,3 +16,7 @@ Route::get('/', 'HomeController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+Route::get('/board/{id}', 'GameController@board');
+
+Route::post('/play/{id}', 'GameController@play');

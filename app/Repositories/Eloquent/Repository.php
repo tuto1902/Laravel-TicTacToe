@@ -62,12 +62,19 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface {
 
 	public function find($id, $columns = ['*'])
 	{
-
+		$this->applyCriteria();
+		return $this->model->select($columns)->find($id);
 	}
 
 	public function findBy($field, $value, $columns = ['*'])
 	{
 
+	}
+
+	public function first($columns = ['*'])
+	{
+		$this->applyCriteria();
+		return $this->model->select($columns)->first();
 	}
 
 	public function pushCriteria(Criteria $criteria)
@@ -91,6 +98,15 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface {
 
 
 		}
+
+		return $this;
+	}
+
+	public function resetCriteria()
+	{
+		$this->criteria = null;
+		$this->criteria = new Collection();
+		$this->makeModel();
 
 		return $this;
 	}
