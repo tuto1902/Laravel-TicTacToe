@@ -18,6 +18,20 @@
   font-weight: 800;
 }
 
+.list-group-item .img-responsive {
+  float: left;
+  margin-right: 20px;
+}
+
+.list-group-item .user-info {
+  position: relative;
+  top: 15px;
+}
+
+.list-group {
+  margin-top: 15px;
+}
+
 /* Game Board */
 
 .tic-tac-toe {

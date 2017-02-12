@@ -1,23 +1,5 @@
 @extends('layouts.app')
 
-@section('styles')
-<style type="text/css">
-    .list-group-item .img-responsive {
-        float: left;
-        margin-right: 20px;
-    }
-
-    .list-group-item .user-info {
-        position: relative;
-        top: 15px;
-    }
-
-    .list-group {
-        margin-top: 15px;
-    }
-</style>
-@endsection
-
 @section('scripts')
 <script language="javascript">
     var pusher = new Pusher('4a4eb548348c96e11364');
