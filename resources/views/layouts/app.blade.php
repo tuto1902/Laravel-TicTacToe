@@ -11,8 +11,10 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
+    @yield('styles')
 
     <!-- Scripts -->
     <script>
@@ -83,6 +85,8 @@
     </div>
 
     <!-- Scripts -->
+    <script src="//js.pusher.com/4.0/pusher.min.js"></script>
     <script src="/js/app.js"></script>
+    @yield('scripts')
 </body>
 </html>
