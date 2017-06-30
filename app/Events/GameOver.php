@@ -19,14 +19,18 @@ class GameOver implements ShouldBroadcast
     public $userId;
     public $type;
     public $location;
-
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     */
     public function __construct($gameId, $userId, $result, $location, $type)
     {
         $this->gameId = $gameId;
+        $this->userId = $userId;
         $this->result = $result;
         $this->location = $location;
         $this->type = $type;
-        $this->userId = $userId;
     }
 
     /**

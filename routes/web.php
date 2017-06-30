@@ -11,11 +11,15 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+Route::post('/new-game', 'HomeController@newGame');
 
 Route::get('/board/{id}', 'GameController@board');
 
@@ -23,4 +27,4 @@ Route::post('/play/{id}', 'GameController@play');
 
 Route::post('/game-over/{id}', 'GameController@gameOver');
 
-Route::post('/new-game', 'HomeController@newGame');
+

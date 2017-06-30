@@ -18,6 +18,11 @@ class NewGame implements ShouldBroadcast
     public $gameId;
     public $from;
 
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     */
     public function __construct($destinationUserId, $gameId, $from)
     {
         $this->destinationUserId = $destinationUserId;
@@ -25,6 +30,11 @@ class NewGame implements ShouldBroadcast
         $this->from = $from;
     }
 
+    /**
+     * Get the channels the event should broadcast on.
+     *
+     * @return Channel|array
+     */
     public function broadcastOn()
     {
         return new Channel('new-game-channel');

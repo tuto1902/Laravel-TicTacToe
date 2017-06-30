@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    public $fillable = ['end_date', 'winner_id'];
+	public $fillable = ['end_date', 'winner_id'];
 
 	public function turns()
 	{
