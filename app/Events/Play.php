@@ -18,15 +18,24 @@ class Play implements ShouldBroadcast
     public $type;
     public $location;
     public $userId;
-
-    public function __construct($gameId, $userId, $location, $type)
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     */
+    public function __construct($gameId, $type, $location, $userId)
     {
         $this->gameId = $gameId;
-        $this->location = $location;
         $this->type = $type;
+        $this->location = $location;
         $this->userId = $userId;
     }
 
+    /**
+     * Get the channels the event should broadcast on.
+     *
+     * @return Channel|array
+     */
     public function broadcastOn()
     {
         return new Channel('game-channel-' . $this->gameId . '-' . $this->userId);

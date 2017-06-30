@@ -11,6 +11,6 @@ class Turn extends Model
 
 	public function game()
 	{
-		return $this->belongsTo('App\Game', 'game_id');
+		$this->belongsTo('App\Game', 'game_id');
 	}
 }

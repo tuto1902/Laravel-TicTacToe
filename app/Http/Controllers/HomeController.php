@@ -2,20 +2,29 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Events\NewGame;
+use Illuminate\Http\Request;
+use App\User;
 use App\Game;
 use App\Turn;
-use App\User;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $user = $request->user();
@@ -26,7 +35,6 @@ class HomeController extends Controller
         }
 
         $users = $usersQuery->paginate(5);
-
         return view('home', compact('user', 'users'));
     }
 
@@ -35,7 +43,8 @@ class HomeController extends Controller
         $user = $request->user();
         $otherUserId = $request->get('user_id');
         $gameId = Game::insertGetId([]);
-        for($i = 1; $i <= 9; $i++){
+        for($i = 1; $i <= 9; $i++)
+        {
             Turn::insert([
                 "game_id" => $gameId,
                 "id" => $i,
@@ -47,6 +56,5 @@ class HomeController extends Controller
         event(new NewGame($otherUserId, $gameId, $user->name));
 
         return redirect("/board/{$gameId}");
-
     }
 }
